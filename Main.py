@@ -6,6 +6,8 @@ from Default_Spy_Details import default_spy_details
 
 from steganography.steganography import Steganography
 
+from datetime import datetime
+
 status_list = ['Online','Offline','Available','Unavailable','Busy','At the movie','At work','In a meeting','At the gym']
 
 # function to take input
@@ -90,6 +92,8 @@ class Friend:
                         friend_name: {
                             'Age': friend_age,
                             'Rating': friend_rating,
+                            'Chat_History' : {
+                            }
                         }
                     })
                 else:
@@ -115,6 +119,8 @@ class Friend:
                         friend_name: {
                             'Age': friend_age,
                             'Rating': friend_rating,
+                            'Chat_History' : {
+                            }
                         }
                     })
                 else:
@@ -142,7 +148,24 @@ class Send_Message:
                 index += 1
             return input_func("Enter friend name :", 1)
     def send_message(self):
-        chat_friend = Send_Message.select_friend()
+        if (self.spy_name != "Demo"):
+            chat_friend = Send_Message.select_friend()
+            image_path = input_func("Enter the name of the image in which you want to encode the message : ",1)
+            secret_message = input_func("Enter the secret message you want to send :",1)
+            output_image = input_func("Enter the name of the output image :",1)
+            Steganography.encode(image_path, output_image, secret_message)
+            print "Message encrypted"
+            spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History'].update({
+                datetime.today().strftime("%D %i %M %S") : {
+                    'Message' : output_image,
+                    'Flag' : True
+                }
+            })
+            print spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History']
+            if(self.spy_name in (spy_dictionary[chat_friend]['Friend'].keys())):
+                print ""
+
+
 
 #####################ADVANCE FUNCTIONS#######################################
 

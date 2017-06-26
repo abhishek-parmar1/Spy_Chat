@@ -7,11 +7,15 @@ spy_dictionary = {
         'Friend': {
             'Aditya' : {
                 'Friend_Age' : 23,
-                'Friend_Rating' : 4.0
+                'Friend_Rating' : 4.0,
+                'Chat_History' : {
+                }
             },
             'Akash'  : {
                 'Friend_Age' : 13,
-                'Friend_Rating' : 3.0
+                'Friend_Rating' : 3.0,
+                'Chat_History' : {
+                }
             }
         }
     },
@@ -31,7 +35,9 @@ spy_dictionary = {
         'Friend' : {
             'Aditya' : {
                 'Friend_Age' : 23,
-                'Friend_Rating' : 4.0
+                'Friend_Rating' : 4.0,
+                'Chat_History' : {
+                }
             }
         }
     }
