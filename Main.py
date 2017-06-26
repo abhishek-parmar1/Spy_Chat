@@ -1,12 +1,26 @@
-###########IMPORT FILES AND VARIABLES################
+###########IMPORT FILES AND VARIABLES AND BASIC FUNCTION################
 
 from All_Spy_Dictionary import spy_dictionary
 
 from Default_Spy_Details import default_spy_details
 
+from steganography.steganography import Steganography
+
 status_list = ['Online','Offline','Available','Unavailable','Busy','At the movie','At work','In a meeting','At the gym']
 
-####################CLASS############################
+# function to take input
+def input_func(string,x):
+    #for input in integer
+    if(x==0):
+        return int(raw_input(string))
+    #for input in string
+    elif(x==1):
+        return raw_input(string)
+    #for input in float
+    elif(x==2):
+        return float(raw_input(string))
+
+####################CLASS###############################################
 
 class Status:
     def __init__(self,spy_name):
@@ -113,21 +127,24 @@ class Send_Message:
     def __init__(self,spy_name):
         self.spy_name=spy_name
     def select_friend(self):
-        print ""
+        if(self.spy_name != "Demo"):
+            print "Select your friend to send message : "
+            index =1
+            for name in (spy_dictionary[self.spy_name]['Friend'].keys()):
+                print str(index) + "> " + name
+                index += 1
+            return input_func("Enter friend name : ",1)
+        else:
+            print "Select your friend to send message : "
+            index = 1
+            for name in (default_spy_details['Demo']['Friend'].keys()):
+                print str(index) + "> " + name
+                index += 1
+            return input_func("Enter friend name :", 1)
+    def send_message(self):
+        chat_friend = Send_Message.select_friend()
 
-#####################FUNCTIONS#######################
-
-# function to take input
-def input_func(string,x):
-    #for input in integer
-    if(x==0):
-        return int(raw_input(string))
-    #for input in string
-    elif(x==1):
-        return raw_input(string)
-    #for input in float
-    elif(x==2):
-        return float(raw_input(string))
+#####################ADVANCE FUNCTIONS#######################################
 
 # function for spy menu
 def spy_menu(spy_name):
@@ -147,7 +164,8 @@ def spy_menu(spy_name):
             print spy_name + " has " + str(obj.add_friend()) + " friends."
         elif(spy_choice == 3):
             obj = Send_Message(spy_name)
-            obj.select_friend()
+            obj.send_a_message()
+
         elif(spy_choice == 4):
             print ""
         elif(spy_choice == 5):
