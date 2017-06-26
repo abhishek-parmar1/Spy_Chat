@@ -8,7 +8,7 @@ status_list = ['Online','Offline','Available','Unavailable','Busy','At the movie
 
 ####################CLASS############################
 
-class status:
+class Status:
     def __init__(self,spy_name):
         self.spy_name=spy_name
     def change_status(self):
@@ -22,25 +22,17 @@ class status:
                     print str(index) + "> " + name
                     index += 1
                 spy_status = raw_input("Enter status : ")
-                if (spy_status in status_list):
-                    spy_dictionary[spy_name]['Status'] = spy_status
-                else:
-                    spy_dictionary[spy_name]['Status'] = spy_status
-                    status_list.append(spy_status)
+                spy_dictionary[spy_name]['Status'] = spy_status
                 print "Your new status is : " + spy_dictionary[spy_name]['Status']
             else:
                 print "Your Current Status is " + default_spy_details['Demo']['Status']
-                print "Select Status or Add your own Status : "
+                print "Select Status : "
                 index = 1
                 for name in status_list:
                     print str(index) + "> " + name
                     index += 1
                 spy_status = raw_input("Enter status : ")
-                if (spy_status in status_list):
-                    default_spy_details['Demo']['Status'] = spy_status
-                else:
-                    default_spy_details['Demo']['Status'] = spy_status
-                    status_list.append(spy_status)
+                default_spy_details['Demo']['Status'] = spy_status
                 print "Your new status is : " + default_spy_details['Demo']['Status']
         elif(spy_choice == 2):
             if(self.spy_name != "Demo"):
@@ -54,7 +46,6 @@ class status:
                 print "Your new status is : " + spy_dictionary[spy_name]['Status']
             else:
                 print "Your Current Status is " + default_spy_details['Demo']['Status']
-                print "Select Status or Add your own Status : "
                 spy_status = raw_input("Enter status : ")
                 if (spy_status in status_list):
                     default_spy_details['Demo']['Status'] = spy_status
@@ -63,7 +54,7 @@ class status:
                     status_list.append(spy_status)
                 print "Your new status is : " + default_spy_details['Demo']['Status']
 
-class friend:
+class Friend:
     def __init__(self,spy_name):
         self.spy_name=spy_name
     def add_friend(self):
@@ -73,13 +64,13 @@ class friend:
             friend_rating = input_func("Enter your friend rating : ", 2)
             if(len(friend_name) <= 0):
                 print "Invalid Friend Name"
-            if(friend_name not in (spy_dictionary.keys())):
+            elif(friend_name not in (spy_dictionary.keys())):
                 print friend_name + " not Exist"
-            if(friend_age <= 12):
-                print friend_name + " is underaged"
-            if(spy_dictionary[self.spy_name]['Rating'] > friend_rating):
-                print friend_name + " has low rating"
-            if( len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and spy_dictionary[self.spy_name]['Rating'] <= friend_rating):
+            elif(friend_age <= 12):
+                print friend_name + " is underaged (less than or equal to 12)"
+            elif(spy_dictionary[self.spy_name]['Rating'] > friend_rating):
+                print friend_name + " has low rating than you"
+            elif( len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and spy_dictionary[self.spy_name]['Rating'] <= friend_rating):
                 if(friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age == spy_dictionary[friend_name]['Age']):
                     spy_dictionary[self.spy_name]['Friend'].update({
                         friend_name: {
@@ -87,6 +78,8 @@ class friend:
                             'Rating': friend_rating,
                         }
                     })
+                else:
+                    print " Entered details not matched the original details of your friend"
             else:
                 print "INVALID DETAILS"
             return len(spy_dictionary[self.spy_name]['Friend'].keys())
@@ -96,13 +89,13 @@ class friend:
             friend_rating = input_func("Enter your friend rating : ", 2)
             if (len(friend_name) <= 0):
                 print "Invalid Friend Name"
-            if (friend_name not in (spy_dictionary.keys())):
+            elif (friend_name not in (spy_dictionary.keys())):
                 print friend_name + " not Exist"
-            if (friend_age <= 12):
-                print friend_name + " is underaged"
-            if (default_spy_details['Demo']['Rating'] > friend_rating):
-                print friend_name + " has low rating"
-            if (len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and default_spy_details['Demo']['Rating'] <= friend_rating):
+            elif (friend_age <= 12):
+                print friend_name + " is underaged (less than or equal to 12)"
+            elif (default_spy_details['Demo']['Rating'] > friend_rating):
+                print friend_name + " has low rating than you"
+            elif (len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and default_spy_details['Demo']['Rating'] <= friend_rating):
                 if (friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age == spy_dictionary[friend_name]['Age']):
                     default_spy_details['Demo']['Friend'].update({
                         friend_name: {
@@ -110,10 +103,17 @@ class friend:
                             'Rating': friend_rating,
                         }
                     })
+                else:
+                    print " Entered details not matched the original details of your friend"
             else:
                 print "INVALID DETAILS"
-            return len(spy_dictionary['Demo']['Friend'].keys())
+            return len(default_spy_details['Demo']['Friend'].keys())
 
+class Send_Message:
+    def __init__(self,spy_name):
+        self.spy_name=spy_name
+    def select_friend(self):
+        print ""
 
 #####################FUNCTIONS#######################
 
@@ -140,13 +140,14 @@ def spy_menu(spy_name):
         print "6> Close Application"
         spy_choice = input_func("select : ",0)
         if(spy_choice == 1):
-            obj = status(spy_name)
+            obj = Status(spy_name)
             obj.change_status()
         elif(spy_choice == 2):
-            obj = friend(spy_name)
-            print spy_name + " has " + obj.add_friend() + " friends."
+            obj = Friend(spy_name)
+            print spy_name + " has " + str(obj.add_friend()) + " friends."
         elif(spy_choice == 3):
-            print ""
+            obj = Send_Message(spy_name)
+            obj.select_friend()
         elif(spy_choice == 4):
             print ""
         elif(spy_choice == 5):
@@ -175,19 +176,21 @@ elif(spy_choice == 2):
                 if(spy_gender == "Male"):
                     spy_age = input_func("Please enter your Age Mr. " + spy_name + " : ",0)
                     if(spy_age <= 12):
-                        print "Mr." + spy_name + " you are underaged, SORRY. "
+                        print "Mr." + spy_name + " you are underaged (less than or equal to 12), SORRY. "
                         break
                     elif(spy_age >= 50):
-                        print "Mr." + spy_name + " you are overaged, SORRY. "
+                        print "Mr." + spy_name + " you are overaged (greater than or equal to 50), SORRY. "
                         break
                     else:
-                        spy_rating = input_func("Please enter your Rating (out of 5) : ",2)
+                        spy_rating = input_func("Please enter your Rating (out of 5.0) : ",2)
                         spy_dictionary.update({
                             spy_name : {
                                 'Gender' : spy_gender,
                                 'Age'    : spy_age,
                                 'Rating' : spy_rating,
-                                'Status': 'Online'
+                                'Status' : 'Online',
+                                'Friend' : {
+                                }
                             }
                         })
                         print "Your Details are : \nName = Mr. " + spy_name + "\nGender = " + str(
@@ -200,19 +203,21 @@ elif(spy_choice == 2):
                 if (spy_gender == "Female"):
                     spy_age = input_func("Please enter your Age Mrs. " + spy_name + " : ", 0)
                     if (spy_age <= 12):
-                        print "Mrs." + spy_name + " you are underaged, SORRY. "
+                        print "Mrs." + spy_name + " you are underaged (less than or equal to 12), SORRY. "
                         break
                     elif (spy_age >= 50):
-                        print "Mrs." + spy_name + " you are overaged, SORRY. "
+                        print "Mrs." + spy_name + " you are overaged (greater than or equal to 50), SORRY. "
                         break
                     else:
-                        spy_rating = input_func("Please enter your Rating (out of 5) : ", 2)
+                        spy_rating = input_func("Please enter your Rating (out of 5.0) : ", 2)
                         spy_dictionary.update({
                             spy_name: {
                                 'Gender': spy_gender,
                                 'Age': spy_age,
                                 'Rating': spy_rating,
-                                'Status': 'Online'
+                                'Status': 'Online',
+                                'Friend': {
+                                }
                             }
                         })
                         print "Your Details are : \nName = Mrs. " + spy_name + "\nGender = " + str(

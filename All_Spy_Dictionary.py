@@ -4,7 +4,7 @@ spy_dictionary = {
         'Age'    : 21,
         'Rating' : 2.0,
         'Status' : 'Online',
-        'Friends': {
+        'Friend': {
             'Aditya' : {
                 'Friend_Age' : 23,
                 'Friend_Rating' : 4.0
