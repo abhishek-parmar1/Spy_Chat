@@ -8,7 +8,7 @@ from All_Spy_Dictionary import chat_history
 
 from Default_Spy_Details import default_spy_details
 
-from Default_Spy_Details import chat_history_demo
+from Default_Spy_Details import chat_history_default
 
 from steganography.steganography import Steganography
 
@@ -131,7 +131,7 @@ class Friend:
                             })
                         else:
                             print " Entered details not matched the original details of your friend"
-            return len(spy_dictionary[self.spy_name]['Friend'].keys())
+            return len(default_spy_details['Demo']['Friend'].keys())
 
 class Send_Message:
     def __init__(self,spy_name):
@@ -164,25 +164,50 @@ class Send_Message:
             output_image_with_path = chat_friend + "/" + self.spy_name + "/" + output_image
             Steganography.encode(image_path, output_image_with_path, secret_message)
             print "Message encrypted"
-            #if(chat_friend in chat_history.keys()):
-            #    chat_history[chat_friend].update({
-            #        datetime.today().strftime("%D %i %M %S"): {
-            #            'Message': output_image,
-            #            'Flag': True
-            #        }
-            #    })
-            #else:
-            #    chat_history.update({
-            #        chat_friend : {
-            #            datetime.today().strftime("%D %i %M %S"): {
-            #                'Message': output_image,
-            #                'Flag': True
-            #            }
-            #        }
-            #    })
-            #print spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History']
-            #if(self.spy_name in (spy_dictionary[chat_friend]['Friend'].keys())):
-            #    print ""
+            if(chat_friend in chat_history.keys()):
+                chat_history[chat_friend].update({
+                    datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                        'Message': output_image_with_path,
+                        'Flag': True
+                    }
+                })
+            else:
+                chat_history.update({
+                    chat_friend : {
+                        datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                            'Message': output_image_with_path,
+                            'Flag': True
+                        }
+                    }
+                })
+        else:
+            chat_friend = Send_Message.select_friend(self)
+            image_path = input_func("Enter the name of the image in which you want to encode the message : ", 1)
+            secret_message = input_func("Enter the secret message you want to send : ", 1)
+            output_image = input_func("Enter the name of the output image (.PNG): ", 1)
+            if ((os.path.isdir(chat_friend)) == False):
+                os.mkdir(chat_friend)
+            if ((os.path.isdir(chat_friend + "/Demo")) == False):
+                os.mkdir(chat_friend + "/Demo")
+            output_image_with_path = chat_friend + "/Demo" + "/" + output_image
+            Steganography.encode(image_path, output_image_with_path, secret_message)
+            print "Message encrypted"
+            if (chat_friend in chat_history_default.keys()):
+                chat_history_default[chat_friend].update({
+                    datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                        'Message': output_image_with_path,
+                        'Flag': True
+                    }
+                })
+            else:
+                chat_history_default.update({
+                    chat_friend: {
+                        datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                            'Message': output_image_with_path,
+                            'Flag': True
+                        }
+                    }
+                })
 
 
 
@@ -207,7 +232,6 @@ def spy_menu(spy_name):
         elif(spy_choice == 3):
             obj = Send_Message(spy_name)
             obj.send_a_message()
-
         elif(spy_choice == 4):
             print ""
         elif(spy_choice == 5):
