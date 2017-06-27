@@ -209,6 +209,43 @@ class Send_Message:
                     }
                 })
 
+class Read_Message:
+    def __init__(self,spy_name):
+        self.spy_name = spy_name
+    def select_a_friend(self):
+        if(self.spy_name != "Demo"):
+            print "Select your friend to read message : "
+            index =1
+            for name in (spy_dictionary[self.spy_name]['Friend'].keys()):
+                print str(index) + "> " + name
+                index += 1
+            print str(index) + "> Demo"
+            return input_func("Enter friend name : ",1)
+    def read_a_message(self):
+        if (self.spy_name != "Demo"):
+            chat_friend = Read_Message.select_a_friend(self)
+            if(chat_friend != 'Demo'):
+                if ((os.path.isdir(self.spy_name)) == True):
+                    if ((os.path.isdir(self.spy_name + "/" + chat_friend)) == True):
+                        image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
+                        output_image_with_path = self.spy_name + "/" + chat_friend + "/" + image_name
+                        secret_text = Steganography.decode(output_image_with_path)
+                        print "secret message is : " + secret_text
+                    else:
+                        print "You have no new messages from " + chat_friend
+                else:
+                    print "You have no new messages"
+            else:
+                if ((os.path.isdir(self.spy_name)) == True):
+                    if ((os.path.isdir(self.spy_name + "/Demo")) == True):
+                        image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
+                        output_image_with_path = self.spy_name + "/Demo" + "/" + image_name
+                        secret_text = Steganography.decode(output_image_with_path)
+                        print "secret message is : " + secret_text
+                    else:
+                        print "You have no new messages from Demo"
+        else:
+            print "You are demo user, you can't read messages "
 
 
 #####################ADVANCE FUNCTIONS#######################################
@@ -233,7 +270,8 @@ def spy_menu(spy_name):
             obj = Send_Message(spy_name)
             obj.send_a_message()
         elif(spy_choice == 4):
-            print ""
+            obj = Read_Message(spy_name)
+            obj.read_a_message()
         elif(spy_choice == 5):
             print ""
         elif(spy_choice == 6):
