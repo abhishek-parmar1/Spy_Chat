@@ -1,8 +1,14 @@
 ###########IMPORT FILES AND VARIABLES AND BASIC FUNCTION################
 
+import os
+
 from All_Spy_Dictionary import spy_dictionary
 
+from All_Spy_Dictionary import chat_history
+
 from Default_Spy_Details import default_spy_details
+
+from Default_Spy_Details import chat_history_demo
 
 from steganography.steganography import Steganography
 
@@ -76,54 +82,56 @@ class Friend:
     def add_friend(self):
         if (self.spy_name != "Demo"):
             friend_name = input_func("Enter your friend name : ",1)
-            friend_age =  input_func("Enter your friend age : ",0)
-            friend_rating = input_func("Enter your friend rating : ", 2)
-            if(len(friend_name) <= 0):
+            if (len(friend_name) <= 0):
                 print "Invalid Friend Name"
-            elif(friend_name not in (spy_dictionary.keys())):
+            if (friend_name not in (spy_dictionary.keys())):
                 print friend_name + " not Exist"
-            elif(friend_age <= 12):
-                print friend_name + " is underaged (less than or equal to 12)"
-            elif(spy_dictionary[self.spy_name]['Rating'] > friend_rating):
-                print friend_name + " has low rating than you"
-            elif( len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and spy_dictionary[self.spy_name]['Rating'] <= friend_rating):
-                if(friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age == spy_dictionary[friend_name]['Age']):
-                    spy_dictionary[self.spy_name]['Friend'].update({
-                        friend_name: {
-                            'Age': friend_age,
-                            'Rating': friend_rating
-                        }
-                    })
-                else:
-                    print " Entered details not matched the original details of your friend"
             else:
-                print "INVALID DETAILS"
+                friend_age =  input_func("Enter your friend age : ",0)
+                if (friend_age <= 12):
+                    print friend_name + " is underaged (less than or equal to 12)"
+                else:
+                    friend_rating = input_func("Enter your friend rating : ", 2)
+                    if (spy_dictionary[self.spy_name]['Rating'] > friend_rating):
+                        print friend_name + " has low rating than you"
+                    else:
+                        if (friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age ==
+                            spy_dictionary[friend_name]['Age']):
+                            spy_dictionary[self.spy_name]['Friend'].update({
+                                friend_name: {
+                                    'Age': friend_age,
+                                    'Rating': friend_rating
+                                }
+                            })
+                        else:
+                            print " Entered details not matched the original details of your friend"
             return len(spy_dictionary[self.spy_name]['Friend'].keys())
         else:
             friend_name = input_func("Enter your friend name : ", 1)
-            friend_age = input_func("Enter your friend age : ", 0)
-            friend_rating = input_func("Enter your friend rating : ", 2)
             if (len(friend_name) <= 0):
                 print "Invalid Friend Name"
-            elif (friend_name not in (spy_dictionary.keys())):
+            if (friend_name not in (spy_dictionary.keys())):
                 print friend_name + " not Exist"
-            elif (friend_age <= 12):
-                print friend_name + " is underaged (less than or equal to 12)"
-            elif (default_spy_details['Demo']['Rating'] > friend_rating):
-                print friend_name + " has low rating than you"
-            elif (len(friend_name) > 0 and friend_name in (spy_dictionary.keys()) and friend_age > 12 and default_spy_details['Demo']['Rating'] <= friend_rating):
-                if (friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age == spy_dictionary[friend_name]['Age']):
-                    default_spy_details['Demo']['Friend'].update({
-                        friend_name: {
-                            'Age': friend_age,
-                            'Rating': friend_rating
-                        }
-                    })
-                else:
-                    print " Entered details not matched the original details of your friend"
             else:
-                print "INVALID DETAILS"
-            return len(default_spy_details['Demo']['Friend'].keys())
+                friend_age = input_func("Enter your friend age : ", 0)
+                if (friend_age <= 12):
+                    print friend_name + " is underaged (less than or equal to 12)"
+                else:
+                    friend_rating = input_func("Enter your friend rating : ", 2)
+                    if (default_spy_details['Demo']['Rating'] > friend_rating):
+                        print friend_name + " has low rating than you"
+                    else:
+                        if (friend_rating == spy_dictionary[friend_name]['Rating'] and friend_age ==
+                            spy_dictionary[friend_name]['Age']):
+                            default_spy_details['Demo']['Friend'].update({
+                                friend_name: {
+                                    'Age': friend_age,
+                                    'Rating': friend_rating
+                                }
+                            })
+                        else:
+                            print " Entered details not matched the original details of your friend"
+            return len(spy_dictionary[self.spy_name]['Friend'].keys())
 
 class Send_Message:
     def __init__(self,spy_name):
@@ -143,23 +151,38 @@ class Send_Message:
                 print str(index) + "> " + name
                 index += 1
             return input_func("Enter friend name :", 1)
-    def send_message(self):
+    def send_a_message(self):
         if (self.spy_name != "Demo"):
-            chat_friend = Send_Message.select_friend()
+            chat_friend = Send_Message.select_friend(self)
             image_path = input_func("Enter the name of the image in which you want to encode the message : ",1)
-            secret_message = input_func("Enter the secret message you want to send :",1)
-            output_image = input_func("Enter the name of the output image :",1)
-            Steganography.encode(image_path, output_image, secret_message)
+            secret_message = input_func("Enter the secret message you want to send : ",1)
+            output_image = input_func("Enter the name of the output image (.PNG): ",1)
+            if((os.path.isdir(chat_friend)) == False):
+                os.mkdir(chat_friend)
+            if((os.path.isdir(chat_friend + "/" + self.spy_name)) == False):
+                os.mkdir(chat_friend + "/" + self.spy_name)
+            output_image_with_path = chat_friend + "/" + self.spy_name + "/" + output_image
+            Steganography.encode(image_path, output_image_with_path, secret_message)
             print "Message encrypted"
-            spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History'].update({
-                datetime.today().strftime("%D %i %M %S") : {
-                    'Message' : output_image,
-                    'Flag' : True
-                }
-            })
-            print spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History']
-            if(self.spy_name in (spy_dictionary[chat_friend]['Friend'].keys())):
-                print ""
+            #if(chat_friend in chat_history.keys()):
+            #    chat_history[chat_friend].update({
+            #        datetime.today().strftime("%D %i %M %S"): {
+            #            'Message': output_image,
+            #            'Flag': True
+            #        }
+            #    })
+            #else:
+            #    chat_history.update({
+            #        chat_friend : {
+            #            datetime.today().strftime("%D %i %M %S"): {
+            #                'Message': output_image,
+            #                'Flag': True
+            #            }
+            #        }
+            #    })
+            #print spy_dictionary[self.spy_name]['Friend'][chat_friend]['Chat_History']
+            #if(self.spy_name in (spy_dictionary[chat_friend]['Friend'].keys())):
+            #    print ""
 
 
 

@@ -37,3 +37,5 @@ spy_dictionary = {
     }
 }
 
+chat_history = {
+}

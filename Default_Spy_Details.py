@@ -12,3 +12,6 @@ default_spy_details = {
         }
     }
 }
+
+chat_history_demo = {
+}
