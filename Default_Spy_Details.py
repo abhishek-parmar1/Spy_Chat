@@ -7,9 +7,7 @@ default_spy_details = {
         'Friend' : {
             'Abhishek' : {
                 'Friend_Age' : 21,
-                'Friend_Rating' : 2.0,
-                'Chat_History' : {
-                }
+                'Friend_Rating' : 2.0
             }
         }
     }

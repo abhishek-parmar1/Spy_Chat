@@ -91,9 +91,7 @@ class Friend:
                     spy_dictionary[self.spy_name]['Friend'].update({
                         friend_name: {
                             'Age': friend_age,
-                            'Rating': friend_rating,
-                            'Chat_History' : {
-                            }
+                            'Rating': friend_rating
                         }
                     })
                 else:
@@ -118,9 +116,7 @@ class Friend:
                     default_spy_details['Demo']['Friend'].update({
                         friend_name: {
                             'Age': friend_age,
-                            'Rating': friend_rating,
-                            'Chat_History' : {
-                            }
+                            'Rating': friend_rating
                         }
                     })
                 else:
