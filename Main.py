@@ -103,6 +103,7 @@ class Friend:
                                     'Rating': friend_rating
                                 }
                             })
+                            print "Your Friend added"
                         else:
                             print " Entered details not matched the original details of your friend"
             return len(spy_dictionary[self.spy_name]['Friend'].keys())
@@ -129,6 +130,7 @@ class Friend:
                                     'Rating': friend_rating
                                 }
                             })
+                            print "Your Friend added"
                         else:
                             print " Entered details not matched the original details of your friend"
             return len(default_spy_details['Demo']['Friend'].keys())
@@ -154,6 +156,9 @@ class Send_Message:
     def send_a_message(self):
         if (self.spy_name != "Demo"):
             chat_friend = Send_Message.select_friend(self)
+            if(chat_friend =="Demo"):
+                print "Sorry you can't send message to demo"
+                return
             image_path = input_func("Enter the name of the image in which you want to encode the message : ",1)
             secret_message = input_func("Enter the secret message you want to send : ",1)
             output_image = input_func("Enter the name of the output image (.PNG): ",1)
@@ -163,10 +168,10 @@ class Send_Message:
                 os.mkdir(chat_friend + "/" + self.spy_name)
             output_image_with_path = chat_friend + "/" + self.spy_name + "/" + output_image
             Steganography.encode(image_path, output_image_with_path, secret_message)
-            print "Message encrypted"
+            print "Message encrypted and sent "
             if(chat_friend in chat_history.keys()):
                 chat_history[chat_friend].update({
-                    datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                    datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
                         'Message': output_image_with_path,
                         'Flag': True
                     }
@@ -174,7 +179,7 @@ class Send_Message:
             else:
                 chat_history.update({
                     chat_friend : {
-                        datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                        datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
                             'Message': output_image_with_path,
                             'Flag': True
                         }
@@ -191,10 +196,10 @@ class Send_Message:
                 os.mkdir(chat_friend + "/Demo")
             output_image_with_path = chat_friend + "/Demo" + "/" + output_image
             Steganography.encode(image_path, output_image_with_path, secret_message)
-            print "Message encrypted"
+            print "Message encrypted and sent"
             if (chat_friend in chat_history_default.keys()):
                 chat_history_default[chat_friend].update({
-                    datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                    datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
                         'Message': output_image_with_path,
                         'Flag': True
                     }
@@ -202,7 +207,7 @@ class Send_Message:
             else:
                 chat_history_default.update({
                     chat_friend: {
-                        datetime.today().strftime("%d/%m/%y  %H/%M/%S"): {
+                        datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
                             'Message': output_image_with_path,
                             'Flag': True
                         }
@@ -224,29 +229,54 @@ class Read_Message:
     def read_a_message(self):
         if (self.spy_name != "Demo"):
             chat_friend = Read_Message.select_a_friend(self)
-            if(chat_friend != 'Demo'):
-                if ((os.path.isdir(self.spy_name)) == True):
-                    if ((os.path.isdir(self.spy_name + "/" + chat_friend)) == True):
-                        image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
-                        output_image_with_path = self.spy_name + "/" + chat_friend + "/" + image_name
-                        secret_text = Steganography.decode(output_image_with_path)
-                        print "secret message is : " + secret_text
-                    else:
-                        print "You have no new messages from " + chat_friend
+            if ((os.path.isdir(self.spy_name)) == True):
+                if ((os.path.isdir(self.spy_name + "/" + chat_friend)) == True):
+                    image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
+                    output_image_with_path = self.spy_name + "/" + chat_friend + "/" + image_name
+                    secret_text = Steganography.decode(output_image_with_path)
+                    print "secret message is : " + secret_text
                 else:
-                    print "You have no new messages"
+                    print "You have no new messages from " + chat_friend
             else:
-                if ((os.path.isdir(self.spy_name)) == True):
-                    if ((os.path.isdir(self.spy_name + "/Demo")) == True):
-                        image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
-                        output_image_with_path = self.spy_name + "/Demo" + "/" + image_name
-                        secret_text = Steganography.decode(output_image_with_path)
-                        print "secret message is : " + secret_text
-                    else:
-                        print "You have no new messages from Demo"
+                print "You have no new messages"
         else:
             print "You are demo user, you can't read messages "
 
+class History:
+    def __init__(self,spy_name):
+        self.spy_name = spy_name
+    def select_a_friend(self):
+        if (self.spy_name != "Demo"):
+            print "Select your friend to read chat : "
+            index = 1
+            for name in (spy_dictionary[self.spy_name]['Friend'].keys()):
+                print str(index) + "> " + name
+                index += 1
+            return input_func("Enter friend name : ", 1)
+        else:
+            print "Select your friend to read chat : "
+            index = 1
+            for name in (default_spy_details['Demo']['Friend'].keys()):
+                print str(index) + "> " + name
+                index += 1
+            return input_func("Enter friend name :", 1)
+
+    def read_chat(self):
+        newdate = datetime.today()
+        if (self.spy_name != "Demo"):
+            chat_friend = History.select_a_friend(self)
+            if (chat_friend in chat_history.keys()):
+                for newdate in chat_history[chat_friend]:
+                    print str(newdate) + " " + str(chat_history[chat_friend][newdate])
+            else:
+                print " no chat history with " + chat_friend
+        else:
+            chat_friend = History.select_a_friend(self)
+            if (chat_friend in chat_history_default.keys()):
+                for newdate in chat_history_default[chat_friend]:
+                    print str(newdate) + " " + str(chat_history_default[chat_friend][newdate])
+            else:
+                print " no chat history with" +chat_friend
 
 #####################ADVANCE FUNCTIONS#######################################
 
@@ -273,7 +303,8 @@ def spy_menu(spy_name):
             obj = Read_Message(spy_name)
             obj.read_a_message()
         elif(spy_choice == 5):
-            print ""
+            obj = History(spy_name)
+            obj.read_chat()
         elif(spy_choice == 6):
             break
 
