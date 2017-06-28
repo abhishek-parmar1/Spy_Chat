@@ -172,7 +172,7 @@ class Send_Message:
             if(chat_friend in chat_history.keys()):
                 chat_history[chat_friend].update({
                     datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
-                        'Message': output_image_with_path,
+                        'Message': secret_message,
                         'Flag': True
                     }
                 })
@@ -180,7 +180,7 @@ class Send_Message:
                 chat_history.update({
                     chat_friend : {
                         datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
-                            'Message': output_image_with_path,
+                            'Message': secret_message,
                             'Flag': True
                         }
                     }
@@ -200,7 +200,7 @@ class Send_Message:
             if (chat_friend in chat_history_default.keys()):
                 chat_history_default[chat_friend].update({
                     datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
-                        'Message': output_image_with_path,
+                        'Message': secret_message,
                         'Flag': True
                     }
                 })
@@ -208,7 +208,7 @@ class Send_Message:
                 chat_history_default.update({
                     chat_friend: {
                         datetime.today().strftime("%d/%m/%y  %H:%M:%S"): {
-                            'Message': output_image_with_path,
+                            'Message': secret_message,
                             'Flag': True
                         }
                     }
