@@ -225,16 +225,33 @@ class Read_Message:
                 print str(index) + "> " + name
                 index += 1
             print str(index) + "> Demo"
+            index += 1
+            unknown_list = os.listdir(self.spy_name)
+            if (len(unknown_list) > 0):
+                print "Messages from other Users : "
+                for name in unknown_list:
+                    print str(index) + "> " + name
+                    index += 1
+
             return input_func("Enter friend name : ",1)
     def read_a_message(self):
         if (self.spy_name != "Demo"):
             chat_friend = Read_Message.select_a_friend(self)
             if ((os.path.isdir(self.spy_name)) == True):
                 if ((os.path.isdir(self.spy_name + "/" + chat_friend)) == True):
-                    image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
-                    output_image_with_path = self.spy_name + "/" + chat_friend + "/" + image_name
-                    secret_text = Steganography.decode(output_image_with_path)
-                    print "secret message is : " + secret_text
+                    message_list = os.listdir(self.spy_name + "/" + chat_friend)
+                    index = 1
+                    if (len(message_list) > 0):
+                        print "Messages from : " + chat_friend
+                        for name in message_list:
+                            print str(index) + "> " + name
+                            index += 1
+                        image_name = input_func("Enter the name of the image which you want to dencode the message : ",1)
+                        output_image_with_path = self.spy_name + "/" + chat_friend + "/" + image_name
+                        secret_text = Steganography.decode(output_image_with_path)
+                        print "secret message is : " + secret_text
+                    else:
+                        print "You have messages from " + chat_friend
                 else:
                     print "You have no new messages from " + chat_friend
             else:
