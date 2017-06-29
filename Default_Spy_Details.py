@@ -1,3 +1,4 @@
+#for storing detail of guest
 default_spy_details = {
     'Demo' :{
         'Gender' : 'Male',
@@ -13,5 +14,6 @@ default_spy_details = {
     }
 }
 
+#for storing chat of guest
 chat_history_default = {
 }

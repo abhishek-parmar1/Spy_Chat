@@ -1,3 +1,4 @@
+#for storing details of spy
 spy_dictionary = {
     'Abhishek' : {
         'Gender' : 'Male',
@@ -37,5 +38,6 @@ spy_dictionary = {
     }
 }
 
+#for storing chat of spy
 chat_history = {
 }
